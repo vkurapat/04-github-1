@@ -1,0 +1,88 @@
+{
+  "name": "Preceptor's Primer",
+
+  // PPBDS student image, pinned to v0.1.1. Bumping is a deliberate
+  // edit to this line — never use `:latest` in student-facing config,
+  // since it would float silently with every push to PPBDS/devcontainers.
+  // Bakes in: gh, quarto, arf (Rust R console), httpgd, pak, and
+  // tutorial.helpers. See https://github.com/PPBDS/devcontainers.
+  //
+  // Note for instructors: `gh` is preinstalled and authenticated against
+  // the Codespace's home repo via the built-in GITHUB_TOKEN. Pushing to
+  // OTHER repos (e.g., cloning a sibling package and pushing to it)
+  // requires a one-time `gh auth login` per Codespace — that's by design,
+  // not a bug. The built-in token is read-mostly outside the home repo.
+  "image": "ghcr.io/ppbds/devcontainers/student:0.1.1",
+
+  "customizations": {
+    "vscode": {
+
+      // Extensions students actually need
+      "extensions": [
+        "reditorsupport.r",
+        "quarto.quarto",
+        "PPBDS.vscode-r-tutorials"
+      ],
+
+      "settings": {
+
+        // Use arf (Rust-based R console) instead of the default R terminal.
+        // The image installs arf at this exact path; if it ever moves,
+        // update both this setting and base/Dockerfile in PPBDS/devcontainers.
+        "r.rterm.linux": "/home/rstudio/.cargo/bin/arf",
+
+        // Required for arf-style consoles to handle pasted code correctly.
+        "r.bracketedPaste": true,
+
+        // Render plots inside VS Code via the httpgd graphics device
+        // instead of opening an external window (which doesn't work in Codespaces).
+        "r.plot.useHttpgd": true,
+
+        // Prevent VS Code from nagging to relaunch the terminal when
+        // environment variables change.
+        "terminal.integrated.environmentChangesRelaunch": false,
+
+        // Don't show a Welcome tab or release notes on startup.
+        "workbench.startupEditor": "none",
+
+        // Auto-stage all changes on commit so students don't get a confusing
+        // dialog asking whether to stage files.
+        "git.enableSmartCommit": true,
+
+        // Don't prompt "are you sure?" before push/pull.
+        "git.confirmSync": false,
+
+        // Don't fetch from the remote in the background. Keeps things
+        // predictable and avoids confusing status bar changes.
+        "git.autofetch": false,
+
+        // Auto-save files after a short delay. Prevents the #1 beginner
+        // problem: "my code isn't working" because the file wasn't saved.
+        "files.autoSave": "afterDelay",
+
+        // Stop VS Code from suggesting random extensions students don't need.
+        "extensions.ignoreRecommendations": true,
+
+        // Prevent the "open repository in parent folder?" prompt that
+        // confuses students who don't understand nested git repos.
+        "git.openRepositoryInParentFolders": "never",
+
+        // Prevent extensions from opening walkthrough tabs on first install.
+        "workbench.welcomePage.walkthroughs.openOnInstall": false,
+
+        // Wrap long lines so students don't think code disappeared
+        // off the right edge of the screen.
+        "editor.wordWrap": "on",
+
+        // Disable the minimap — beginners don't use it and it wastes
+        // screen space, especially on Chromebooks and small laptops.
+        "editor.minimap.enabled": false,
+
+        // Prevent VS Code from opening files in "preview" mode (italic
+        // tab title) which silently replaces the tab when another file
+        // is clicked. Beginners think their file vanished.
+        "workbench.editor.enablePreview": false
+      }
+    }
+  }
+}
